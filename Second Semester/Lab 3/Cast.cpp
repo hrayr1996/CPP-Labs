@@ -50,7 +50,6 @@ int Cast::integer(char *str) {
     return tmp;
 }
 
-
 size_t Cast::toSize_t(char *str) {
     size_t tmp = 0;
     int cur = 0;

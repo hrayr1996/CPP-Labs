@@ -33,8 +33,10 @@ public:
      * @param points
      * @return
      */
+    // First item is the count of all items in points list
     bool add(char *title, char **points);
 
+    // First item is the count of all items in points list
     bool add(size_t index, char **points);
 
     /**
@@ -59,6 +61,10 @@ public:
     size_t count() {
         return _count;
     }
+
+    bool show();
+    bool show(size_t index);
+    bool show(char* pointer);
 
     Connections();
 

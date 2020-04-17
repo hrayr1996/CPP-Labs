@@ -3,8 +3,9 @@
 //
 
 #include "Connections.h"
-#include "Cast.cpp"
 #include "Helper.h"
+#include <iostream>
+using namespace std;
 
 size_t *Connections::getPointer(size_t index) {
     return this->_connections[index];
@@ -21,12 +22,14 @@ size_t Connections::getPointerIndex(char *pointer) {
 //    char tmp, tmp_2;
     size_t pos = 0;
     size_t index = 0;
-
+    if (this->count() == 0) {
+        return -1;
+    }
     while (pointer[pos] != '\0' && this->_pointers[index][pos] != '\0') {
         if (pointer[pos] != this->_pointers[index][pos]) {
             pos = 0;
             index++;
-            if (index > this->count()) {
+            if (index >= this->count()) {
                 return -1;
             }
             continue;
@@ -62,6 +65,7 @@ size_t Connections::createPointer(char *pointer) {
     return pointer_index;
 }
 
+// First item is the count of all items in points list
 bool Connections::add(char *title, char **points) {
     size_t pointer_index;
     // Check if pointer already in list
@@ -73,7 +77,7 @@ bool Connections::add(char *title, char **points) {
 
 bool Connections::add(size_t index, char **points) {
     // First item is the count of all items in points list
-    size_t count = Cast::toSize_t(points[0]);
+    size_t count = static_cast<size_t*>(static_cast<void*>(points[0]))[0];
 
     // Lets walk over the items and add them one by one
     // Also add new items to the global pointers list
@@ -122,8 +126,20 @@ char *Connections::getTitle(size_t index) {
     return this->_pointers[index];
 }
 
+
+bool Connections::show() {
+    for (size_t index=0; index < 1; ++index) {
+        cout << this->_pointers[index] << " (" << this->_connections[index][0] << ") has connection with ";
+        for (size_t j = 1; j < this->_connections[index][0]; ++j) {
+            cout << this->_pointers[this->_connections[index][0]] << ", ";
+        }
+        cout << endl;
+    }
+    return true;
+}
+
 Connections::Connections() {
     this->_count = 0;
-    this->_pointers = nullptr; //(char *) malloc(sizeof(char));
-    this->_connections = nullptr; // (size_t *) malloc(sizeof(size_t));
+    this->_pointers = (char **) malloc(sizeof(char));
+    this->_connections = (size_t **) malloc(sizeof(size_t));
 }
