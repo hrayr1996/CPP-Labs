@@ -50,18 +50,19 @@ public:
         char* tmp = new char[1000];
         size_t start_pos = 0;
         // says what should be taken from string stream
-        for (size_t i = 0; str[i] != '\0' || i == 1000; ++i) {
+        for (size_t i = 0; i < 1000; ++i) {
             if (str[i] == '-') {
                 Helper::new_line = false;
+                index = 0;
                 Helper::prepareClause(str, pointer, start_pos, i-1);
                 start_pos = i+1;
                 continue;
             }
             if (str[i] == ',' || str[i] == '\0') {
                 Helper::new_line = false;
+                pointers[++index] = (char*)malloc(sizeof(char));
                 Helper::prepareClause(str, pointers[index], start_pos, i-1);
                 start_pos = i+1;
-                ++index;
                 if (str[i] == '\0') {
                     return true;
                 }

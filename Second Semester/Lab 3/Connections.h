@@ -54,12 +54,19 @@ public:
 
     size_t createPointer(char *pointer); // Creates new element in pointers list and returns index of created element
 
+    // Checks if two index1 has connection with index2
+    bool check(size_t index1, size_t index2);
+
     bool remove();
 
     bool removeAll();
 
     size_t count() {
         return _count;
+    }
+
+    size_t count(size_t index) {
+        return this->_connections[index][0];
     }
 
     bool show();

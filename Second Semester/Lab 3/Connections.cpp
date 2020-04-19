@@ -19,7 +19,6 @@ size_t *Connections::getPointer(char *pointer) {
 }
 
 size_t Connections::getPointerIndex(char *pointer) {
-//    char tmp, tmp_2;
     size_t pos = 0;
     size_t index = 0;
     if (this->count() == 0) {
@@ -36,17 +35,6 @@ size_t Connections::getPointerIndex(char *pointer) {
         }
         pos++;
     }
-
-    /*while ((memcpy(&tmp, pointer + pos, sizeof(char)) && memcpy(&tmp_2, (&this->_pointers[index]) + pos)) && tmp != '\0' && tmp_2 != '\0' && tmp != tmp_2) {
-        if ((tmp != '\0' && tmp_2 == '\0' )|| (tmp == '\0' && tmp_2 != '\0')) {
-            pos = 0;
-            index++;
-        }
-        if (index > this->count()) {
-            return -1;
-        }
-    }*/
-
     return index;
 }
 
@@ -113,10 +101,29 @@ bool Connections::add(size_t index, char *point) {
 }
 
 bool Connections::add(size_t index1, size_t index2) {
-    this->_connections[index1][
-            ++this->_connections[index1][0] // this is count of elements. Increment it and use it only after that so it will be the position of current element
-            ] = index2;
+    size_t _index;
+    if (!this->check(index1, index2)) {
+        _index = ++this->_connections[index1][0]; // Increment count of point connections
+        this->_connections[index1][
+                _index // this is count of elements. Increment it and use it only after that so it will be the position of current element
+        ] = index2;
+    }
+    if (!this->check(index2, index1)) {
+        _index = ++this->_connections[index2][0];
+        this->_connections[index2][
+            _index
+        ] = index1;
+    }
     return true;
+}
+
+bool Connections::check(size_t index1, size_t index2) {
+    for(size_t i = 1; i <= this->count(index1); i++) {
+        if (this->_connections[index1][i] == index2) {
+            return true;
+        }
+    }
+    return false;
 }
 
 char *Connections::getTitle(size_t index) {
@@ -128,10 +135,10 @@ char *Connections::getTitle(size_t index) {
 
 
 bool Connections::show() {
-    for (size_t index=0; index < 1; ++index) {
+    for (size_t index=0; index < this->count(); ++index) {
         cout << this->_pointers[index] << " (" << this->_connections[index][0] << ") has connection with ";
-        for (size_t j = 1; j < this->_connections[index][0]; ++j) {
-            cout << this->_pointers[this->_connections[index][0]] << ", ";
+        for (size_t j = 1; j <= this->_connections[index][0]; ++j) {
+            cout << this->_pointers[this->_connections[index][j]] << ", ";
         }
         cout << endl;
     }
