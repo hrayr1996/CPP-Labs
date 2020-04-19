@@ -24,7 +24,7 @@ bool CommandCenter::addConnections() {
     char** pointers = (char**)malloc(sizeof(char));
     Helper::starting_text_input = true;
     Helper::pointer_found_      = false;
-    size_t index = 1;
+    size_t index = 0;
     cout << "Input pointers in format: <pointer> - <pointer1>,<pointer2>,<pointer3>...\\" << endl
     << "Maximum input characters 1000." << endl;
     cin.getline (input, 1000);
@@ -41,8 +41,7 @@ bool CommandCenter::addConnections() {
         Helper::preparePointer(input, pointer, pointers, index);
         pointers[0] = static_cast<char*>(static_cast<void*>(&index)); // lets save the raw data in index into pointers [0]
         // Saved data has size of size_t` 8 bytes
-//        CommandCenter::connections.add(pointer, pointers);
-        cout << pointer << endl;
+        CommandCenter::connections.add(pointer, pointers);
         input[0] = '\0';
     }
     Helper::starting_text_input = false;
